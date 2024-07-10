@@ -13,13 +13,19 @@ const port = process.env.PORT || 3001;
 
 // Configure CORS
 app.use(cors({
-  origin: ['https://mern-b2310.web.app'], // Allow specific origin
+  origin: '*', // Allow all origins for testing
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
 
 app.options('*', cors()); // Preflight request handling
+
+// Middleware for debugging
+app.use((req, res, next) => {
+  console.log('Request headers:', req.headers);
+  next();
+});
 
 const html = `
 <!DOCTYPE html>
