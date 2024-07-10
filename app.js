@@ -13,7 +13,7 @@ const port = process.env.PORT || 3001;
 
 // Configure CORS
 app.use(cors({
-  origin: ' https://mern-b2310.web.app',
+  origin: 'https://mern-b2310.web.app',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
