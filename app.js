@@ -66,8 +66,6 @@ const html = `
 app.use(cors({
   origin: 'https://mern-b2310.web.app', // Allow only this specific origin
   methods: ['GET', 'POST'], // Allow GET and POST methods
-  credentials: true, // Enable CORS credentials
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
 }));
 
 mongoose.connect(process.env.MONGODB_URI, {
@@ -99,8 +97,6 @@ app.get('/visitor', async (req, res) => {
     // Set CORS headers for the /visitor endpoint
     res.setHeader('Access-Control-Allow-Origin', 'https://mern-b2310.web.app');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
 
     // Respond with JSON data
     res.json({ your_ip: req.ip, visitor_number: numVisits });
