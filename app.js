@@ -1,8 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
+// app.js
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const IpModel = require('./ip.model');
+
+// Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -74,17 +79,21 @@ app.get('/', (req, res) => res.type('html').send(html));
 app.get('/location', (req, res) => res.json({ location: 'cikarang' }));
 
 app.get('/visitor', async (req, res) => {
+  console.log('Received request at /visitor');
   try {
     const ipData = new IpModel({
       ip_addr: req.ip,
       date_added: new Date(),
     });
     await ipData.save();
+    console.log('IP data saved');
 
     const numVisits = await IpModel.countDocuments();
+    console.log('Counted number of visits:', numVisits);
 
     res.json({ your_ip: req.ip, visitor_number: numVisits });
   } catch (error) {
+    console.error('Error occurred:', error);
     res.status(500).json({ error: 'An error occurred' });
   }
 });
