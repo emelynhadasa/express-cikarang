@@ -1,9 +1,12 @@
+/* eslint-disable import/no-extraneous-dependencies */
+// app.js
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const IpModel = require('./ip.model');
 
+// Load environment variables from .env file
 dotenv.config();
 
 const app = express();
