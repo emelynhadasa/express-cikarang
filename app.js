@@ -12,6 +12,8 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3001;
 
+app.use(cors());
+
 const html = `
 <!DOCTYPE html>
 <html>
@@ -62,22 +64,6 @@ const html = `
   </body>
 </html>
 `;
-
-const allowedOrigins = ['https://mern-b2310.web.app', 'https://localhost:3000'];
-
-app.use(cors({
-  origin(origin, callback) {
-    // Check if the origin is in the allowed list or if it's not defined (e.g., non-browser clients)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-}));
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
