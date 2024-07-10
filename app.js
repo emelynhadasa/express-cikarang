@@ -1,13 +1,10 @@
-const express = require("express");
+/* eslint-disable import/no-extraneous-dependencies */
+const express = require('express');
+const cors = require('cors');
+const IpModel = require('./ip.model');
+
 const app = express();
 const port = process.env.PORT || 3001;
-
-app.get("/", (req, res) => res.type('html').send(html));
-
-const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-
-server.keepAliveTimeout = 120 * 1000;
-server.headersTimeout = 120 * 1000;
 
 const html = `
 <!DOCTYPE html>
@@ -58,4 +55,25 @@ const html = `
     </section>
   </body>
 </html>
-`
+`;
+
+app.use(cors());
+
+app.get('/', (req, res) => res.type('html').send(html));
+app.get('/location', (req, res) => res.json({ location: 'cikarang' }));
+app.get('/visitor', async (req, res) => {
+  const ipData = new IpModel({
+    ip_addr: req.ip,
+    date_added: new Date(),
+  });
+  await ipData.save();
+
+  const numVisits = await IpModel.countDocuments();
+
+  return res.json({ your_ip: req.ip, visitor_number: numVisits });
+});
+
+const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+server.keepAliveTimeout = 120 * 1000;
+server.headersTimeout = 120 * 1000;
