@@ -58,28 +58,35 @@ const html = `
 </html>
 `;
 
-app.use(cors(
-  {
-    origin: ['https://finpromp.web.app '],
-    methods: ['POST', 'GET'],
-    credentials: true,
-  },
-));
+app.use(cors({
+  origin: ['https://finpromp.web.app'],
+  methods: ['POST', 'GET'],
+  credentials: true,
+}));
 
-mongoose.connect('mongodb+srv://emelyndhadasa:plqx5k6h2aNEVfsM@cluster0.mzmk6ez.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 app.get('/', (req, res) => res.type('html').send(html));
+
 app.get('/location', (req, res) => res.json({ location: 'cikarang' }));
+
 app.get('/visitor', async (req, res) => {
-  const ipData = new IpModel({
-    ip_addr: req.ip,
-    date_added: new Date(),
-  });
-  await ipData.save();
+  try {
+    const ipData = new IpModel({
+      ip_addr: req.ip,
+      date_added: new Date(),
+    });
+    await ipData.save();
 
-  const numVisits = await IpModel.countDocuments();
+    const numVisits = await IpModel.countDocuments();
 
-  return res.json({ your_ip: req.ip, visitor_number: numVisits });
+    res.json({ your_ip: req.ip, visitor_number: numVisits });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred' });
+  }
 });
 
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
