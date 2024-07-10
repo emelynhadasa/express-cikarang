@@ -1,12 +1,9 @@
-/* eslint-disable import/no-extraneous-dependencies */
-// app.js
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const IpModel = require('./ip.model');
 
-// Load environment variables from .env file
 dotenv.config();
 
 const app = express();
@@ -64,9 +61,10 @@ const html = `
 `;
 
 app.use(cors({
-  origin: ['https://finpromp.web.app'],
-  methods: ['POST', 'GET'],
-  credentials: true,
+  origin: 'https://mern-b2310.web.app', // Allow only this specific origin
+  methods: ['GET', 'POST'], // Allow GET and POST methods
+  credentials: true, // Enable CORS credentials
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
 }));
 
 mongoose.connect(process.env.MONGODB_URI, {
