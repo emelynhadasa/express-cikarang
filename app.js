@@ -1,5 +1,4 @@
 /* eslint-disable import/no-extraneous-dependencies */
-// app.js
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -12,7 +11,15 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(cors());
+// Configure CORS
+app.use(cors({
+  origin: ['https://mern-b2310.web.app'], // Allow specific origin
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}));
+
+app.options('*', cors()); // Preflight request handling
 
 const html = `
 <!DOCTYPE html>
@@ -91,7 +98,6 @@ app.get('/visitor', async (req, res) => {
     const numVisits = await IpModel.countDocuments();
     console.log('Counted number of visits:', numVisits);
 
-    // Respond with JSON data
     res.json({ your_ip: req.ip, visitor_number: numVisits });
   } catch (error) {
     console.error('Error occurred:', error);
