@@ -63,11 +63,20 @@ const html = `
 </html>
 `;
 
+const allowedOrigins = ['https://mern-b2310.web.app', 'https://localhost:3000'];
+
 app.use(cors({
-  origin: 'https://mern-b2310.web.app', // Allow only this specific origin
-  methods: ['GET', 'POST'], // Allow GET and POST methods
-  credentials: true, // Enable CORS credentials
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
+  origin(origin, callback) {
+    // Check if the origin is in the allowed list or if it's not defined (e.g., non-browser clients)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 }));
 
 mongoose.connect(process.env.MONGODB_URI, {
@@ -95,12 +104,6 @@ app.get('/visitor', async (req, res) => {
 
     const numVisits = await IpModel.countDocuments();
     console.log('Counted number of visits:', numVisits);
-
-    // Set CORS headers for the /visitor endpoint
-    res.setHeader('Access-Control-Allow-Origin', 'https://mern-b2310.web.app');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
 
     // Respond with JSON data
     res.json({ your_ip: req.ip, visitor_number: numVisits });
