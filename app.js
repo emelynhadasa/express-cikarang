@@ -96,6 +96,13 @@ app.get('/visitor', async (req, res) => {
     const numVisits = await IpModel.countDocuments();
     console.log('Counted number of visits:', numVisits);
 
+    // Set CORS headers for the /visitor endpoint
+    res.setHeader('Access-Control-Allow-Origin', 'https://mern-b2310.web.app');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+    // Respond with JSON data
     res.json({ your_ip: req.ip, visitor_number: numVisits });
   } catch (error) {
     console.error('Error occurred:', error);
