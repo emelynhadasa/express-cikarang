@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const IpModel = require('./ip.model');
 
 const app = express();
@@ -57,7 +58,15 @@ const html = `
 </html>
 `;
 
-app.use(cors());
+app.use(cors(
+  {
+    origin: ['https://finpromp.web.app '],
+    methods: ['POST', 'GET'],
+    credentials: true,
+  },
+));
+
+mongoose.connect('mongodb+srv://emelyndhadasa:plqx5k6h2aNEVfsM@cluster0.mzmk6ez.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
 
 app.get('/', (req, res) => res.type('html').send(html));
 app.get('/location', (req, res) => res.json({ location: 'cikarang' }));
