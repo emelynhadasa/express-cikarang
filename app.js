@@ -13,7 +13,7 @@ const port = process.env.PORT || 3001;
 
 // Configure CORS
 app.use(cors({
-  origin: '*', // Allow all origins for testing
+  origin: 'https://express-hello-world-519us3na1-emelyns-projects-1c4097eb.vercel.app/*', // Allow all origins for testing
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
